@@ -1,0 +1,28 @@
+name: Build QB64 EXE
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download QB64
+      run: |
+        curl -L -o qb64.zip https://github.com/QB64Team/qb64/releases/download/v2.1.0/qb64-win.zip
+        tar -xf qb64.zip
+
+    - name: Compile BASIC to EXE
+      run: |
+        cd qb64
+        qb64.exe ..\dave_cahit_berkay_final.bas -x
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: Dave-EXE
+        path: "*.exe"
